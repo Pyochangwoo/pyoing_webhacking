@@ -120,6 +120,13 @@ app.get('/post_comments', (req, res) => {
 
 
 
+// 서버 측 코드
+app.post('/decrypt_cookie', (req, res) => {
+  // req.body.cookieValue를 복호화하여 사용자 이름을 추출하는 코드
+  var decryptedUsername = req.signedCookies['user'];
+  res.send(JSON.stringify({username: decryptedUsername}));
+});
+
 
 // POST 삭제 API
 app.post('/posts_remove', (req, res) => {

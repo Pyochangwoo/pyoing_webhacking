@@ -1,9 +1,37 @@
 // 로그인 여부 확인
 var isLoggedIn = getCookie("user");
 
+var username = getCookie("user");
+
+
+// 쿠키값을 서버로 전송하는 Ajax 요청
+var xhr = new XMLHttpRequest();
+xhr.open('POST', '/decrypt_cookie', true);
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.onreadystatechange = function() {
+if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    // 서버로부터 받은 값으로 사용자 이름 표시
+    var decryptedUsername = JSON.parse(this.responseText).username;
+    settingsLinkA.textContent = 'Welcome '+`[${decryptedUsername}]`;
+    settingsLinkA.style.fontWeight = "bold";
+}
+};
+xhr.send(JSON.stringify({cookieValue: username}));
+
 // 드롭다운 메뉴 항목 생성
 var loginMenu = document.getElementById("loginMenu");
 if (isLoggedIn) {
+
+
+var settingsLink = document.createElement("li");
+var settingsLinkA = document.createElement("a");
+settingsLinkA.textContent = username;
+settingsLinkA.classList.add("dropdown-item");
+settingsLinkA.href = "#";
+settingsLink.appendChild(settingsLinkA);
+loginMenu.appendChild(settingsLink);
+
+
 var profileLink = document.createElement("li");
 var profileLinkA = document.createElement("a");
 profileLinkA.textContent = "Profile";
@@ -12,13 +40,6 @@ profileLinkA.href = "#";
 profileLink.appendChild(profileLinkA);
 loginMenu.appendChild(profileLink);
 
-var settingsLink = document.createElement("li");
-var settingsLinkA = document.createElement("a");
-settingsLinkA.textContent = "Settings";
-settingsLinkA.classList.add("dropdown-item");
-settingsLinkA.href = "#";
-settingsLink.appendChild(settingsLinkA);
-loginMenu.appendChild(settingsLink);
 
 var divider = document.createElement("li");
 divider.innerHTML = '<hr class="dropdown-divider">';
