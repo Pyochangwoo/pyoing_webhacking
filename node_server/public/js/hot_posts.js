@@ -4,10 +4,20 @@ fetch('/hot_posts')
     const container = document.querySelector('#hot-posts');
     container.innerHTML = '';
     for (let i = 0; i < data.data.length; i++) {
+      const postId = data.data[i].id;
       const postPreview = document.createElement('div');
       postPreview.className = 'hpost-preview';
       const postLink = document.createElement('a');
       postLink.href = '#';
+      postLink.addEventListener('click', () => {
+        fetch(`/posts/${postId}`)
+        window.location.href = '../post_board/board_view.html';
+        console.log(postId)
+          .then((response) => response.json())
+          .then((data) => {
+          })
+          .catch((error) => console.error(error));
+      });
       const postTitle = document.createElement('h2');
       postTitle.className = 'hpost-title';
       postTitle.textContent = data.data[i].title;

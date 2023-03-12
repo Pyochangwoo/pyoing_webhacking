@@ -95,7 +95,7 @@ let result = null;
 app.get('/posts/:postId', (req, res) => {
   const { postId } = req.params;
   connection.query(`SELECT id ,title, writer, views, created_at, content FROM pyoing_board WHERE id = ${postId}`, (err, queryResult) => {
-    if (err) {
+    if (err) { 
       console.error(err);
       res.status(500).send('Internal Server Error');
       return;
@@ -107,6 +107,8 @@ app.get('/posts/:postId', (req, res) => {
     result = queryResult;
   });
 });
+
+
 
 app.get('/post_comments', (req, res) => {
   if (result === null) {
@@ -196,9 +198,8 @@ app.get('/locked_posts/:postId', (req, res) => {
 });
 
 // 인기글 불러오기
-// GET /hot_posts 요청 핸들러
 app.get('/hot_posts', (req, res) => {
-  connection.query('SELECT title, content, writer, created_at, views FROM pyoing_board ORDER BY views DESC, created_at ASC LIMIT 4', (error, results, fields) => {
+  connection.query('SELECT id, title, content, writer, created_at, views FROM pyoing_board ORDER BY views DESC, created_at ASC LIMIT 4', (error, results, fields) => {
     if (error) throw error;
     console.log(results)
     res.send({ data: results });
